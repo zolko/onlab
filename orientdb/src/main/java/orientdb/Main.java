@@ -20,8 +20,8 @@ public class Main {
 			System.out.println(h.getText());
 			h.setText("hercules.out('mother', 'father').name");
 			System.out.println(h.getText());
-			// Object execute = h.execute();
-			// System.out.println(execute.getClass());
+			Object execute = h.execute();
+			System.out.println(execute.getClass());
 			System.out.println("Hercules parents name: " + execute);
 		} finally {
 			if (g != null) {
