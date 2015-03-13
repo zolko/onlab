@@ -8,12 +8,13 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 public class Main {
 
 	public static void main(String[] args) {
-		OrientGraph g = new OrientGraph("plocal:E:/Projects/orientgraph/db");
+		OrientGraph g = new OrientGraph("plocal:/home/OrientDB/railway-test-1");
 		System.out.println("OrientGraph created!");
 		OGremlinHelper.global().create();
 		try {
-			new OCommandGremlin("g.loadGraphML('E:/Projects/graph-of-the-gods.xml')").execute();
-			System.out.println("The graph-of-the-gods.xml has been loaded.");
+			new OCommandGremlin("g.loadGraphML('/home/Documents/railway-test-1.graphml')").execute();
+			System.out.println("The railway-test-1.graphml has been loaded.");
+			/*
 			OCommandGremlin h = new OCommandGremlin("hercules = g.V('name', 'hercules').next()");
 			h.execute();
 			System.out.println("Hercules variable created.");
@@ -23,6 +24,7 @@ public class Main {
 			Object execute = h.execute();
 			System.out.println(execute.getClass());
 			System.out.println("Hercules parents name: " + execute);
+			*/
 		} finally {
 			if (g != null) {
 				g.shutdown();
