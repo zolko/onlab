@@ -24,19 +24,28 @@ public class Main {
 				System.out.println("The railway-test-1.graphml has been loaded.");
 			}
 			
-			// Check track elements segment length is negative or zero. (PosLength)
-			
 			OCommandGremlin gremcomm = new OCommandGremlin();
+			
+			// Check track elements segment length is negative or zero. (PosLength)
 			gremcomm.setText("g.V.has('Segment_length', T.lte, 0).id");
-			System.out.println("The segments id, where the segment lenght is negative or zero:");
+			System.out.println("The PosLength pattern result:");
 			System.out.println(gremcomm.execute());
 			
 			// (SwitchSensor)
 			gremcomm.setText("switches = []").execute();
 			gremcomm.setText("g.V('labels',':Sensor').in('TrackElement_sensor').dedup()" + 
 							 ".filter{it.labels == ':Switch:TrackElement'}.fill(switches).id").execute();
-			gremcomm.setText("g.V('labels', ':Switch:TrackElement').has('id', T.notin, switches).id");
-			System.out.println("The switches, which doesn't have sensor:");
+			gremcomm.setText("g.V('labels',':Switch:TrackElement').has('id', T.notin, switches).id");
+			System.out.println("The SwitchSensor pattern result:");
+			System.out.println(gremcomm.execute());
+			
+			// (RouteSensor)
+			gremcomm.setText("sensors = []").execute();
+			gremcomm.setText("g.V('labels',':Route').out('Route_routeDefinition').fill(sensors).id").execute();
+			gremcomm.setText("g.V('labels',':Route').out('Route_switchPosition')." + 
+							 "out('SwitchPosition_switch').out('TrackElement_sensor')." + 
+							 "has('id', T.notin, sensors).id");
+			System.out.println("The RouteSensor pattern result:");
 			System.out.println(gremcomm.execute());
 			
 			/*
