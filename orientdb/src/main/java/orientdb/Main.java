@@ -10,8 +10,8 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 public class Main {
 
 	public static void main(String[] args) {
-		String dbPath = "E:/Projects/OrientDB/railway-test-1";
-		String graphmlPath = "E:/Drive/BME/Aktuális/Önlab/railway-test-1.graphml";
+		String dbPath = "/home/zolko/OrientDB/railway-test-1";
+		String graphmlPath = "/home/zolko/Documents/railway-test-1.graphml";
 		boolean dbExist = new File(dbPath).exists();
 		// Open database
 		OrientGraph g = new OrientGraph("plocal:" + dbPath);
