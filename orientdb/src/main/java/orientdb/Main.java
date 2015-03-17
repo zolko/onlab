@@ -1,6 +1,9 @@
 package orientdb;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 
 import com.orientechnologies.orient.graph.gremlin.OCommandGremlin;
 import com.orientechnologies.orient.graph.gremlin.OGremlinHelper;
@@ -9,24 +12,28 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 
 public class Main {
 
-	public static void main(String[] args) {
-		String dbPath = "/home/zolko/OrientDB/railway-test-1";
+	public static void main(String[] args) throws IOException {
+		String dbPath = "/home/zolko/Databases/railway-test-1";
 		String graphmlPath = "/home/zolko/Documents/railway-test-1.graphml";
-		boolean dbExist = new File(dbPath).exists();
-		// Open database
+		File db = new File(dbPath);
+		
+		// Delete previous database, if it exists
+		if (db.exists()) {
+			FileUtils.deleteDirectory(db);
+		}
+		
+		// Open new orient database
 		OrientGraph g = new OrientGraph("plocal:" + dbPath);
 		System.out.println("OrientGraph opened!");
 		OGremlinHelper.global().create();
 		try {
-			// Load the graphml file. If it exists, don't load again!
-			if (dbExist == false) {
-				new OCommandGremlin("g.loadGraphML('" + graphmlPath + "')").execute();
-				System.out.println("The railway-test-1.graphml has been loaded.");
-			}
+			// Load the graphml file
+			new OCommandGremlin("g.loadGraphML('" + graphmlPath + "')").execute();
+			System.out.println("The railway-test-1.graphml has been loaded.");
 			
 			OCommandGremlin gremcomm = new OCommandGremlin();
 			
-			// Check track elements segment length is negative or zero. (PosLength)
+			// (PosLength)
 			gremcomm.setText("g.V.has('Segment_length', T.lte, 0).id");
 			System.out.println("The PosLength pattern result:");
 			System.out.println(gremcomm.execute());
