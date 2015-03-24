@@ -1,6 +1,7 @@
 package orientdb;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
@@ -9,30 +10,36 @@ import com.orientechnologies.orient.graph.gremlin.OCommandGremlin;
 import com.orientechnologies.orient.graph.gremlin.OGremlinHelper;
 import com.tinkerpop.blueprints.*;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
+import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		String dbPath = "/home/zolko/Databases/railway-test-1";
-		String graphmlPath = "/home/zolko/Documents/railway-test-1.graphml";
-		// String dbPath = "E:/Projects/OrientDB/railway_test-1";
-		// String graphmlPath = "C:/Users/Zoltán/Google Drive/BME/Aktuális/Önlab/railway-test-1.graphml";
+		// String dbPath = "/home/zolko/Databases/railway-test-1";
+		// String graphmlPath = "/home/zolko/Documents/railway-test-1.graphml";
+		String dbPath = "E:/Projects/OrientDB/railway-test-1";
+		String graphmlPath = "E:/Drive/BME/Aktuális/Önlab/railway-test-1.graphml";
 		File db = new File(dbPath);
 		
 		// Delete previous database, if it exists
 		if (db.exists()) {
 			FileUtils.deleteDirectory(db);
 		}
-		
+		/**/
 		// Open new orient database
 		OrientGraph g = new OrientGraph("plocal:" + dbPath);
 		System.out.println("OrientGraph opened!");
+		
 		OGremlinHelper.global().create();
 		try {
 			// Load the graphml file
-			new OCommandGremlin("g.loadGraphML('" + graphmlPath + "')").execute();
-			System.out.println("The railway-test-1.graphml has been loaded.");
-			
+			GraphMLReader reader = new GraphMLReader(g);
+			reader.setVertexIdKey("id");
+			reader.inputGraph(new FileInputStream(graphmlPath));
+			System.out.println("The railway-user-1.graphml has been loaded.");
+
+			/**/
+			// Create a gremlin command
 			OCommandGremlin gremcomm = new OCommandGremlin();
 			
 			// (PosLength)
