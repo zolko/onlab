@@ -36,8 +36,8 @@ public class Main {
 			// Load the graphml file
 			start_time = System.currentTimeMillis();
 			GraphMLReader reader = new GraphMLReader(g);
-			reader.setVertexIdKey("id");
-			reader.inputGraph(new FileInputStream(graphmlPath));
+			reader.inputGraph(new FileInputStream(graphmlPath), 100);
+			
 			System.out.println("The railway-user-1.graphml has been loaded. (time: " + (System.currentTimeMillis() - start_time) + " ms)");
 
 			// Create a gremlin command
