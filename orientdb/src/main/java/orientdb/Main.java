@@ -3,20 +3,26 @@ package orientdb;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
 import com.orientechnologies.orient.graph.gremlin.OCommandGremlin;
 import com.orientechnologies.orient.graph.gremlin.OGremlinHelper;
 import com.tinkerpop.blueprints.*;
+import com.tinkerpop.blueprints.impls.orient.OrientEdge;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
+import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
+import com.tinkerpop.gremlin.Tokens.T;
+import com.tinkerpop.gremlin.java.GremlinPipeline;
+import com.tinkerpop.pipes.PipeFunction;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		String dbPath = "/home/zolko/Databases/railway-repair-1";
-		String graphmlPath = "/home/zolko/Documents/railway-repair-1.graphml";
+		String dbPath = "/home/zolko/Databases/railway-test-1";
+		String graphmlPath = "/home/zolko/Documents/railway-test-1.graphml";
 		// String dbPath = "E:/Projects/OrientDB/railway-test-1";
 		// String graphmlPath = "E:/Drive/BME/Aktu�lis/�nlab/railway-test-1.graphml";
 		File db = new File(dbPath);
@@ -45,10 +51,20 @@ public class Main {
 
 			// First command. Some reason it takes more time then other commands.
 			gremcomm.setText("g.V('labels',':Route')").execute();
+						
+			GremlinPipeline pipe = new GremlinPipeline();
+			List results;
+
+			// (PosLength) with GremlinPipeline
+			start_time = System.currentTimeMillis();
+			results = pipe.start(g.getVertices("labels", ":TrackElement:Segment")).has("Segment_length", T.lte, 0).toList();
+			System.out.println("The PosLength pattern result (gremlinpipeline):");
+			System.out.println(results);
+			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
 			
 			// (PosLength)
 			start_time = System.currentTimeMillis();
-			gremcomm.setText("g.V.has('Segment_length', T.lte, 0).id");
+			gremcomm.setText("g.V.has('Segment_length', T.lte, 0)");
 			System.out.println("The PosLength pattern result:");
 			System.out.println(gremcomm.execute());
 			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
@@ -57,7 +73,7 @@ public class Main {
 			start_time = System.currentTimeMillis();
 			gremcomm.setText("g.V('labels',':Switch:TrackElement').except(" +
 							 "g.V('labels',':Switch:TrackElement').filter{it.bothE('TrackElement_sensor').hasNext()}.toList()).id");
-			System.out.println("The SwitchSensor pattern result3:");
+			System.out.println("The SwitchSensor pattern result:");
 			System.out.println(gremcomm.execute());
 			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
 			
@@ -107,27 +123,19 @@ public class Main {
 							 "_().out('Route_entry').except(signal))," +
 							 "_().out('Route_exit').in('Route_entry').out('Route_routeDefinition').except(sensor)).id");
 			*/
-			gremcomm.setText("signal = []; route1 = []; sensor = []; g.V('labels',':Route').store(route1).and(" +
-					 "_().out('Route_exit').store(signal)," +
-					 "_().out('Route_routeDefinition').in('TrackElement_sensor')" +
-					 ".out('TrackElement_connectsTo').out('TrackElement_sensor').store(sensor).in('Route_routeDefinition')" +
-					 ".except(route1).out('Route_entry').except(signal)," +
-					 "_().out('Route_exit').in('Route_entry').out('Route_routeDefinition').except(sensor)).id");
+			gremcomm.setText("signal = []; route1 = []; sensor = []; g.V('labels',':Route').store(route1).and("
+					 + "_().out('Route_exit').store(signal),"
+					 + "_().out('Route_routeDefinition').in('TrackElement_sensor')"
+					 + ".out('TrackElement_connectsTo').out('TrackElement_sensor').store(sensor).or("
+					 + "_().filter{!it.bothE('Route_routeDefinition').hasNext()},"
+					 + "_().in('Route_routeDefinition').except(route1).out('Route_entry').except(signal)),"
+					 + "_().out('Route_exit').or("
+					 + "_().filter{!it.bothE('Route_entry').hasNext()},"
+					 + "_().in('Route_entry').out('Route_routeDefinition').except(sensor))).id");
 			System.out.println("The SignalNeighbor pattern result:");
 			System.out.println(gremcomm.execute());
 			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
 			
-			/*
-			OCommandGremlin h = new OCommandGremlin("hercules = g.V('name', 'hercules').next()");
-			h.execute();
-			System.out.println("Hercules variable created.");
-			System.out.println(h.getText());
-			h.setText("hercules.out('mother', 'father').name");
-			System.out.println(h.getText());
-			Object execute = h.execute();
-			System.out.println(execute.getClass());
-			System.out.println("Hercules parents name: " + execute);
-			*/
 		} finally {
 			if (g != null) {
 				g.shutdown();
