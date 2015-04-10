@@ -53,6 +53,36 @@ public class Main {
 			gremcomm.setText("g.V('labels',':Route')").execute();
 			
 			// (PosLength)
+			List<String> lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/PosLength.gremlin"));
+			for (String line : lines) {
+				System.out.println(gremcomm.setText(line).execute());
+			}
+			
+			// (SwitchSensor)
+			lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SwitchSensor.gremlin"));
+			for (String line : lines) {
+				System.out.println(gremcomm.setText(line).execute());
+			}
+			
+			// (RouteSensor)
+			lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/RouteSensor.gremlin"));
+			for (String line : lines) {
+				System.out.println(gremcomm.setText(line).execute());
+			}
+			
+			// (SwitchSet)
+			lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SwitchSet.gremlin"));
+			for (String line : lines) {
+				System.out.println(gremcomm.setText(line).execute());
+			}
+			
+			// (SignalNeighbor)
+			lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SignalNeighbor.gremlin"));
+			for (String line : lines) {
+				System.out.println(gremcomm.setText(line).execute());
+			}
+			/*
+			// (PosLength)
 			start_time = System.currentTimeMillis();
 			gremcomm.setText("PosLength = new Table()").execute();
 			gremcomm.setText("g.V.has('Segment_length', T.lte, 0).as('segment').table(PosLength)").execute();
@@ -74,14 +104,19 @@ public class Main {
 			// (RouteSensor)
 			start_time = System.currentTimeMillis();
 			gremcomm.setText("RouteSensor = new Table()").execute();
+			gremcomm.setText("sensors = g.V('labels',':Route').out('Route_routeDefinition').toList()").execute();
 			gremcomm.setText("g.V('labels',':Route').as('route').out('Route_switchPosition').as('switchposition')"
 					+ ".out('SwitchPosition_switch').as('switch').out('TrackElement_sensor').as('sensor')"
-					+ ".except(g.V('labels',':Route').out('Route_routeDefinition').toList()).table(RouteSensor)").execute();
+					+ ".except(sensors).table(RouteSensor)").execute();
 			gremcomm.setText("RouteSensor");
 			System.out.println("The RouteSensor pattern result:");
 			System.out.println(gremcomm.execute());
 			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
+
+//			List<String> lines = FileUtils.readLines(null);
+//			for (String line : lines) {
+//				
+//			}
 			// (SwitchSet)
 			start_time = System.currentTimeMillis();
 			gremcomm.setText("SwitchSet = new Table()").execute();

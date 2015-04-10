@@ -1,0 +1,4 @@
+SignalNeighbor = new Table()
+sig = []
+g.V('labels',':Route').as('route1').out('Route_exit').as('signal').store(sig).back('route1').out('Route_routeDefinition').as('sensor1').in('TrackElement_sensor').as('te1').out('TrackElement_connectsTo').as('te2').out('TrackElement_sensor').as('sensor2').in('Route_routeDefinition').except('route1').as('route2').or(_().filter{!it.outE('Route_entry').hasNext()},_().out('Route_entry').except(sig)).table(SignalNeighbor)
+SignalNeighbor
