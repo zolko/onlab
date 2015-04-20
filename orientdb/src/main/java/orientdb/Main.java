@@ -48,38 +48,65 @@ public class Main {
 
 			// Create a gremlin command
 			OCommandGremlin gremcomm = new OCommandGremlin();
-
-			// First command. Some reason it takes more time then other commands.
-			gremcomm.setText("g.V('labels',':Route')").execute();
 			
 			// (PosLength)
-			List<String> lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/PosLength.gremlin"));
+			List<String> lines = FileUtils.readLines(
+					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/PosLength.gremlin"));
+			System.out.println("The PosLength pattern result:");
 			for (String line : lines) {
-				System.out.println(gremcomm.setText(line).execute());
+				if (lines.indexOf(line) == lines.size() - 1) {
+					System.out.println(gremcomm.setText(line).execute());
+				} else {
+					gremcomm.setText(line).execute();
+				}
 			}
 			
 			// (SwitchSensor)
-			lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SwitchSensor.gremlin"));
+			lines = FileUtils.readLines(
+					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SwitchSensor.gremlin"));
+			System.out.println("The SwitchSensor pattern result:");
 			for (String line : lines) {
-				System.out.println(gremcomm.setText(line).execute());
+				if (lines.indexOf(line) == lines.size() - 1) {
+					System.out.println(gremcomm.setText(line).execute());
+				} else {
+					gremcomm.setText(line).execute();
+				}
 			}
 			
 			// (RouteSensor)
-			lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/RouteSensor.gremlin"));
+			lines = FileUtils.readLines(
+					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/RouteSensor.gremlin"));
+			System.out.println("The RouteSensor pattern result:");
 			for (String line : lines) {
-				System.out.println(gremcomm.setText(line).execute());
+				if (lines.indexOf(line) == lines.size() - 1) {
+					System.out.println(gremcomm.setText(line).execute());
+				} else {
+					gremcomm.setText(line).execute();
+				}
 			}
 			
 			// (SwitchSet)
-			lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SwitchSet.gremlin"));
+			lines = FileUtils.readLines(
+					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SwitchSet.gremlin"));
+			System.out.println("The SwitchSet pattern result:");
 			for (String line : lines) {
-				System.out.println(gremcomm.setText(line).execute());
+				if (lines.indexOf(line) == lines.size() - 1) {
+					System.out.println(gremcomm.setText(line).execute());
+				} else {
+					gremcomm.setText(line).execute();
+				}
 			}
 			
 			// (SignalNeighbor)
-			lines = FileUtils.readLines(FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SignalNeighbor.gremlin"));
+			lines = FileUtils.readLines(
+					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SignalNeighbor.gremlin"));
+			System.out.println("The SignalNeighbor pattern result:");
 			for (String line : lines) {
-				System.out.println(gremcomm.setText(line).execute());
+				if (lines.indexOf(line) == lines.size() - 1) {
+					System.out.println(gremcomm.setText(line).execute());
+				} else {
+					gremcomm.setText(line).execute();
+				}
 			}
 			/*
 			// (PosLength)
@@ -113,10 +140,6 @@ public class Main {
 			System.out.println(gremcomm.execute());
 			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
 
-//			List<String> lines = FileUtils.readLines(null);
-//			for (String line : lines) {
-//				
-//			}
 			// (SwitchSet)
 			start_time = System.currentTimeMillis();
 			gremcomm.setText("SwitchSet = new Table()").execute();

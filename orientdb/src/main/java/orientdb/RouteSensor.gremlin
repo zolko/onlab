@@ -1,4 +1,4 @@
 RouteSensor = new Table()
-sensors = g.V('labels',':Route').out('Route_routeDefinition').toList()
-g.V('labels',':Route').as('route').out('Route_switchPosition').as('switchposition').out('SwitchPosition_switch').as('switch').out('TrackElement_sensor').as('sensor').except(sensors).table(RouteSensor)
+routes = []
+g.V('labels',':Route').as('route').store(routes).out('Route_switchPosition').as('switchposition').out('SwitchPosition_switch').as('switch').out('TrackElement_sensor').as('sensor').or(_().filter{!it.inE('Route_routeDefinition').hasNext()},_().in('Route_routeDefinition').except(routes)).table(RouteSensor)
 RouteSensor
