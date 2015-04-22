@@ -50,8 +50,9 @@ public class Main {
 			OCommandGremlin gremcomm = new OCommandGremlin();
 			
 			// (PosLength)
+			String dir = "/home/zolko/git/onlab/orientdb/src/main/java/orientdb/";
 			List<String> lines = FileUtils.readLines(
-					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/PosLength.gremlin"));
+					FileUtils.getFile(dir + "PosLength.gremlin"));
 			System.out.println("The PosLength pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
@@ -63,7 +64,7 @@ public class Main {
 			
 			// (SwitchSensor)
 			lines = FileUtils.readLines(
-					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SwitchSensor.gremlin"));
+					FileUtils.getFile(dir + "SwitchSensor.gremlin"));
 			System.out.println("The SwitchSensor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
@@ -75,7 +76,7 @@ public class Main {
 			
 			// (RouteSensor)
 			lines = FileUtils.readLines(
-					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/RouteSensor.gremlin"));
+					FileUtils.getFile(dir + "RouteSensor.gremlin"));
 			System.out.println("The RouteSensor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
@@ -87,7 +88,7 @@ public class Main {
 			
 			// (SwitchSet)
 			lines = FileUtils.readLines(
-					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SwitchSet.gremlin"));
+					FileUtils.getFile(dir + "SwitchSet.gremlin"));
 			System.out.println("The SwitchSet pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
@@ -99,7 +100,7 @@ public class Main {
 			
 			// (SignalNeighbor)
 			lines = FileUtils.readLines(
-					FileUtils.getFile("/home/zolko/git/onlab/orientdb/src/main/java/orientdb/SignalNeighbor.gremlin"));
+					FileUtils.getFile(dir + "SignalNeighbor.gremlin"));
 			System.out.println("The SignalNeighbor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
