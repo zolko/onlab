@@ -50,13 +50,15 @@ public class Main {
 			OCommandGremlin gremcomm = new OCommandGremlin();
 			
 			// (PosLength)
-			String dir = "/home/zolko/git/onlab/orientdb/src/main/java/orientdb/";
+			String dir = "/home/zolko/git/onlab/orientdb/src/main/resources/queries/";
 			List<String> lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "PosLength.gremlin"));
+			List<Vertex> posLengthResult;
 			System.out.println("The PosLength pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
-					System.out.println(gremcomm.setText(line).execute());
+					posLengthResult = gremcomm.setText(line).execute();
+					System.out.println(posLengthResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -65,10 +67,12 @@ public class Main {
 			// (SwitchSensor)
 			lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "SwitchSensor.gremlin"));
+			List<Vertex> switchSensorResult;
 			System.out.println("The SwitchSensor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
-					System.out.println(gremcomm.setText(line).execute());
+					switchSensorResult = gremcomm.setText(line).execute();
+					System.out.println(switchSensorResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -77,10 +81,12 @@ public class Main {
 			// (RouteSensor)
 			lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "RouteSensor.gremlin"));
+			List<Vertex> routeSensorResult;
 			System.out.println("The RouteSensor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
-					System.out.println(gremcomm.setText(line).execute());
+					routeSensorResult = gremcomm.setText(line).execute();
+					System.out.println(routeSensorResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -89,10 +95,12 @@ public class Main {
 			// (SwitchSet)
 			lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "SwitchSet.gremlin"));
+			List<Vertex> switchSetResult;
 			System.out.println("The SwitchSet pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
-					System.out.println(gremcomm.setText(line).execute());
+					switchSetResult = gremcomm.setText(line).execute();
+					System.out.println(switchSetResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -101,10 +109,12 @@ public class Main {
 			// (SignalNeighbor)
 			lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "SignalNeighbor.gremlin"));
+			List<Vertex> signalNeighborResult;
 			System.out.println("The SignalNeighbor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
-					System.out.println(gremcomm.setText(line).execute());
+					signalNeighborResult = gremcomm.setText(line).execute();
+					System.out.println(signalNeighborResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
