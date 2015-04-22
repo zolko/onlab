@@ -10,21 +10,15 @@ import org.apache.commons.io.FileUtils;
 import com.orientechnologies.orient.graph.gremlin.OCommandGremlin;
 import com.orientechnologies.orient.graph.gremlin.OGremlinHelper;
 import com.tinkerpop.blueprints.*;
-import com.tinkerpop.blueprints.impls.orient.OrientEdge;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
-import com.tinkerpop.gremlin.Tokens.T;
-import com.tinkerpop.gremlin.java.GremlinPipeline;
-import com.tinkerpop.pipes.PipeFunction;
+import com.tinkerpop.pipes.util.structures.Row;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		String dbPath = "/home/zolko/Databases/railway-test-1";
-		String graphmlPath = "/home/zolko/Documents/railway-test-1.graphml";
-		// String dbPath = "E:/Projects/OrientDB/railway-test-1";
-		// String graphmlPath = "E:/Drive/BME/Aktu�lis/�nlab/railway-test-1.graphml";
+		String dbPath = "/home/zolko/Databases/railway-repair-1";
+		String graphmlPath = "/home/zolko/Documents/railway-repair-1.graphml";
 		File db = new File(dbPath);
 		
 		// Delete previous database, if it exists
@@ -48,17 +42,26 @@ public class Main {
 
 			// Create a gremlin command
 			OCommandGremlin gremcomm = new OCommandGremlin();
+			Transformations t = new Transformations(g);
+			List<String> lines;
+			String dir = "/home/zolko/git/onlab/orientdb/src/main/resources/queries/";
+			
+			// Turn on the repair session
+			boolean isRepair = false;
+			boolean isUser = false;
 			
 			// (PosLength)
-			String dir = "/home/zolko/git/onlab/orientdb/src/main/resources/queries/";
-			List<String> lines = FileUtils.readLines(
+			lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "PosLength.gremlin"));
-			List<Vertex> posLengthResult;
+			List<Row> posLengthResult;
 			System.out.println("The PosLength pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
 					posLengthResult = gremcomm.setText(line).execute();
 					System.out.println(posLengthResult);
+					if (isRepair)
+						t.posLengthRepair(posLengthResult);
+					
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -67,12 +70,14 @@ public class Main {
 			// (SwitchSensor)
 			lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "SwitchSensor.gremlin"));
-			List<Vertex> switchSensorResult;
+			List<Row> switchSensorResult;
 			System.out.println("The SwitchSensor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
 					switchSensorResult = gremcomm.setText(line).execute();
 					System.out.println(switchSensorResult);
+					if (isRepair)
+						t.switchSensorRepair(switchSensorResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -81,12 +86,14 @@ public class Main {
 			// (RouteSensor)
 			lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "RouteSensor.gremlin"));
-			List<Vertex> routeSensorResult;
+			List<Row> routeSensorResult;
 			System.out.println("The RouteSensor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
 					routeSensorResult = gremcomm.setText(line).execute();
 					System.out.println(routeSensorResult);
+					if (isRepair)
+						t.routeSensorRepair(routeSensorResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -95,12 +102,14 @@ public class Main {
 			// (SwitchSet)
 			lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "SwitchSet.gremlin"));
-			List<Vertex> switchSetResult;
+			List<Row> switchSetResult;
 			System.out.println("The SwitchSet pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
 					switchSetResult = gremcomm.setText(line).execute();
 					System.out.println(switchSetResult);
+					if (isRepair)
+						t.switchSetRepair(switchSetResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -109,16 +118,81 @@ public class Main {
 			// (SignalNeighbor)
 			lines = FileUtils.readLines(
 					FileUtils.getFile(dir + "SignalNeighbor.gremlin"));
-			List<Vertex> signalNeighborResult;
+			List<Row> signalNeighborResult;
 			System.out.println("The SignalNeighbor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
 					signalNeighborResult = gremcomm.setText(line).execute();
 					System.out.println(signalNeighborResult);
+					if (isRepair)
+						t.signalNeighborRepair(signalNeighborResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
 			}
+			
+			if (isRepair || isUser) {
+				// (PosLengthTest)
+				lines = FileUtils.readLines(
+						FileUtils.getFile(dir + "PosLength.gremlin"));
+				System.out.println("The PosLength pattern after transformation:");
+				for (String line : lines) {
+					if (lines.indexOf(line) == lines.size() - 1) {
+						System.out.println(gremcomm.setText(line).execute());
+					} else {
+						gremcomm.setText(line).execute();
+					}
+				}
+				
+				// (SwitchSensorTest)
+				lines = FileUtils.readLines(
+						FileUtils.getFile(dir + "SwitchSensor.gremlin"));
+				System.out.println("The SwitchSensor pattern after transformation:");
+				for (String line : lines) {
+					if (lines.indexOf(line) == lines.size() - 1) {
+						System.out.println(gremcomm.setText(line).execute());
+					} else {
+						gremcomm.setText(line).execute();
+					}
+				}
+				
+				// (RouteSensorTest)
+				lines = FileUtils.readLines(
+						FileUtils.getFile(dir + "RouteSensor.gremlin"));
+				System.out.println("The RouteSensor pattern after transformation:");
+				for (String line : lines) {
+					if (lines.indexOf(line) == lines.size() - 1) {
+						System.out.println(gremcomm.setText(line).execute());
+					} else {
+						gremcomm.setText(line).execute();
+					}
+				}
+				
+				// (SwitchSetRepairTest)
+				lines = FileUtils.readLines(
+						FileUtils.getFile(dir + "SwitchSet.gremlin"));
+				System.out.println("The SwitchSet pattern after transformation:");
+				for (String line : lines) {
+					if (lines.indexOf(line) == lines.size() - 1) {
+						System.out.println(gremcomm.setText(line).execute());
+					} else {
+						gremcomm.setText(line).execute();
+					}
+				}
+				
+				// (SignalNeighborRepairTest)
+				lines = FileUtils.readLines(
+						FileUtils.getFile(dir + "SignalNeighbor.gremlin"));
+				System.out.println("The SignalNeighbor pattern after transformation:");
+				for (String line : lines) {
+					if (lines.indexOf(line) == lines.size() - 1) {
+						System.out.println(gremcomm.setText(line).execute());
+					} else {
+						gremcomm.setText(line).execute();
+					}
+				}
+			}
+			
 			/*
 			// (PosLength)
 			start_time = System.currentTimeMillis();
