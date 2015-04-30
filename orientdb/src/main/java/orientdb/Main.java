@@ -17,8 +17,8 @@ import com.tinkerpop.pipes.util.structures.Row;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		String dbPath = "/home/zolko/Databases/railway-repair-1";
-		String graphmlPath = "/home/zolko/Documents/railway-repair-1.graphml";
+		String dbPath = "/home/zolko/Databases/railway-test-1";
+		String graphmlPath = "/home/zolko/Documents/railway-test-1-new.graphml";
 		File db = new File(dbPath);
 		
 		// Delete previous database, if it exists
@@ -47,12 +47,12 @@ public class Main {
 			String dir = "/home/zolko/git/onlab/orientdb/src/main/resources/queries/";
 			
 			// Turn on the repair session
-			boolean isRepair = false;
+			boolean isRepair = true;
 			boolean isUser = false;
 			
 			// (PosLength)
 			lines = FileUtils.readLines(
-					FileUtils.getFile(dir + "PosLength.gremlin"));
+					FileUtils.getFile(dir + "NewPosLength.gremlin"));
 			List<Row> posLengthResult;
 			System.out.println("The PosLength pattern result:");
 			for (String line : lines) {
@@ -61,7 +61,6 @@ public class Main {
 					System.out.println(posLengthResult);
 					if (isRepair)
 						t.posLengthRepair(posLengthResult);
-					
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -69,7 +68,7 @@ public class Main {
 			
 			// (SwitchSensor)
 			lines = FileUtils.readLines(
-					FileUtils.getFile(dir + "SwitchSensor.gremlin"));
+					FileUtils.getFile(dir + "NewSwitchSensor.gremlin"));
 			List<Row> switchSensorResult;
 			System.out.println("The SwitchSensor pattern result:");
 			for (String line : lines) {
@@ -85,7 +84,7 @@ public class Main {
 			
 			// (RouteSensor)
 			lines = FileUtils.readLines(
-					FileUtils.getFile(dir + "RouteSensor.gremlin"));
+					FileUtils.getFile(dir + "NewRouteSensor.gremlin"));
 			List<Row> routeSensorResult;
 			System.out.println("The RouteSensor pattern result:");
 			for (String line : lines) {
@@ -101,7 +100,7 @@ public class Main {
 			
 			// (SwitchSet)
 			lines = FileUtils.readLines(
-					FileUtils.getFile(dir + "SwitchSet.gremlin"));
+					FileUtils.getFile(dir + "NewSwitchSet.gremlin"));
 			List<Row> switchSetResult;
 			System.out.println("The SwitchSet pattern result:");
 			for (String line : lines) {
@@ -115,17 +114,17 @@ public class Main {
 				}
 			}
 			
-			// (SignalNeighbor)
+			// (SemaphoreNeighbor)
 			lines = FileUtils.readLines(
-					FileUtils.getFile(dir + "SignalNeighbor.gremlin"));
-			List<Row> signalNeighborResult;
-			System.out.println("The SignalNeighbor pattern result:");
+					FileUtils.getFile(dir + "NewSemaphoreNeighbor.gremlin"));
+			List<Row> semaphoreNeighborResult;
+			System.out.println("The SemaphoreNeighbor pattern result:");
 			for (String line : lines) {
 				if (lines.indexOf(line) == lines.size() - 1) {
-					signalNeighborResult = gremcomm.setText(line).execute();
-					System.out.println(signalNeighborResult);
+					semaphoreNeighborResult = gremcomm.setText(line).execute();
+					System.out.println(semaphoreNeighborResult);
 					if (isRepair)
-						t.signalNeighborRepair(signalNeighborResult);
+						t.semaphoreNeighborRepair(semaphoreNeighborResult);
 				} else {
 					gremcomm.setText(line).execute();
 				}
@@ -134,7 +133,7 @@ public class Main {
 			if (isRepair || isUser) {
 				// (PosLengthTest)
 				lines = FileUtils.readLines(
-						FileUtils.getFile(dir + "PosLength.gremlin"));
+						FileUtils.getFile(dir + "NewPosLength.gremlin"));
 				System.out.println("The PosLength pattern after transformation:");
 				for (String line : lines) {
 					if (lines.indexOf(line) == lines.size() - 1) {
@@ -146,7 +145,7 @@ public class Main {
 				
 				// (SwitchSensorTest)
 				lines = FileUtils.readLines(
-						FileUtils.getFile(dir + "SwitchSensor.gremlin"));
+						FileUtils.getFile(dir + "NewSwitchSensor.gremlin"));
 				System.out.println("The SwitchSensor pattern after transformation:");
 				for (String line : lines) {
 					if (lines.indexOf(line) == lines.size() - 1) {
@@ -158,7 +157,7 @@ public class Main {
 				
 				// (RouteSensorTest)
 				lines = FileUtils.readLines(
-						FileUtils.getFile(dir + "RouteSensor.gremlin"));
+						FileUtils.getFile(dir + "NewRouteSensor.gremlin"));
 				System.out.println("The RouteSensor pattern after transformation:");
 				for (String line : lines) {
 					if (lines.indexOf(line) == lines.size() - 1) {
@@ -170,7 +169,7 @@ public class Main {
 				
 				// (SwitchSetRepairTest)
 				lines = FileUtils.readLines(
-						FileUtils.getFile(dir + "SwitchSet.gremlin"));
+						FileUtils.getFile(dir + "NewSwitchSet.gremlin"));
 				System.out.println("The SwitchSet pattern after transformation:");
 				for (String line : lines) {
 					if (lines.indexOf(line) == lines.size() - 1) {
@@ -180,10 +179,10 @@ public class Main {
 					}
 				}
 				
-				// (SignalNeighborRepairTest)
+				// (SemaphoreNeighborRepairTest)
 				lines = FileUtils.readLines(
-						FileUtils.getFile(dir + "SignalNeighbor.gremlin"));
-				System.out.println("The SignalNeighbor pattern after transformation:");
+						FileUtils.getFile(dir + "NewSemaphoreNeighbor.gremlin"));
+				System.out.println("The SemaphoreNeighbor pattern after transformation:");
 				for (String line : lines) {
 					if (lines.indexOf(line) == lines.size() - 1) {
 						System.out.println(gremcomm.setText(line).execute());
@@ -192,130 +191,6 @@ public class Main {
 					}
 				}
 			}
-			
-			/*
-			// (PosLength)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("PosLength = new Table()").execute();
-			gremcomm.setText("g.V.has('Segment_length', T.lte, 0).as('segment').table(PosLength)").execute();
-			gremcomm.setText("PosLength");
-			System.out.println("The PosLength pattern result:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
-			// (SwitchSensor)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("SwitchSensor = new Table()").execute();
-			gremcomm.setText("g.V('labels',':Switch:TrackElement').filter{!it.outE('TrackElement_sensor').hasNext()}"
-					+ ".as('switch').table(SwitchSensor)").execute();
-			gremcomm.setText("SwitchSensor");
-			System.out.println("The SwitchSensor pattern result:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
-			// (RouteSensor)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("RouteSensor = new Table()").execute();
-			gremcomm.setText("sensors = g.V('labels',':Route').out('Route_routeDefinition').toList()").execute();
-			gremcomm.setText("g.V('labels',':Route').as('route').out('Route_switchPosition').as('switchposition')"
-					+ ".out('SwitchPosition_switch').as('switch').out('TrackElement_sensor').as('sensor')"
-					+ ".except(sensors).table(RouteSensor)").execute();
-			gremcomm.setText("RouteSensor");
-			System.out.println("The RouteSensor pattern result:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-
-			// (SwitchSet)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("SwitchSet = new Table()").execute();
-			gremcomm.setText("position = ''; g.V('labels',':SwitchPosition').as('switchposition').in('Route_switchPosition').as('route')"
-					+ ".out('Route_exit').has('Signal_currentState', T.eq, 'GO').as('signal').back('switchposition')"
-					+ ".sideEffect{position = it.SwitchPosition_switchState}.out('SwitchPosition_switch')"
-					+ ".filter{it.Switch_currentState != position}.as('switch').table(SwitchSet)").execute();
-			gremcomm.setText("SwitchSet");
-			System.out.println("The SwitchSet pattern result:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
-			// (SignalNeighbor)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("SignalNeighbor = new Table()").execute();
-			gremcomm.setText("sig = []; g.V('labels',':Route').as('route1').out('Route_exit').as('signal').store(sig)"
-					+ ".back('route1').out('Route_routeDefinition').as('sensor1').in('TrackElement_sensor').as('te1')"
-					+ ".out('TrackElement_connectsTo').as('te2').out('TrackElement_sensor').as('sensor2')"
-					+ ".in('Route_routeDefinition').except('route1').as('route2').or("
-					+ "_().filter{!it.outE('Route_entry').hasNext()},"
-					+ "_().out('Route_entry').except(sig)).table(SignalNeighbor)").execute();
-			gremcomm.setText("SignalNeighbor");
-			System.out.println("The SignalNeighbor pattern result:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
-			/*
-			 * old patterns
-			// (PosLength)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("g.V.has('Segment_length', T.lte, 0)");
-			System.out.println("The PosLength pattern result:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
-			// (SwitchSensor)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("g.V('labels',':Switch:TrackElement').except(" +
-							 "g.V('labels',':Switch:TrackElement').filter{it.bothE('TrackElement_sensor').hasNext()}.toList()).id");
-			System.out.println("The SwitchSensor pattern result:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
-			// (RouteSensor)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("sensors = []; g.V('labels',':Route').out('Route_routeDefinition').fill(sensors).id").execute();
-			gremcomm.setText("g.V('labels',':Route').out('Route_switchPosition')." + 
-							 "out('SwitchPosition_switch').out('TrackElement_sensor')." + 
-							 "has('id', T.notin, sensors).id");
-			System.out.println("The RouteSensor pattern result:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
-			// (SwitchSet)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("switchpositions = []; g.V('labels',':Signal').has('Signal_currentState', T.eq, 'GO').in('Route_exit')" +
-							 ".out('Route_switchPosition').fill(switchpositions).id").execute();			
-			gremcomm.setText("g.V('labels',':SwitchPosition').or(" +
-							 "_().has('SwitchPosition_switchState', T.eq, 'RIGHT').out('SwitchPosition_switch').has('Switch_currentState', T.neq, 'RIGHT')," +
-							 "_().has('SwitchPosition_switchState', T.eq, 'LEFT').out('SwitchPosition_switch').has('Switch_currentState', T.neq, 'LEFT')," +
-							 "_().has('SwitchPosition_switchState', T.eq, 'STRAIGHT').out('SwitchPosition_switch').has('Switch_currentState', T.neq, 'STRAIGHT')," +
-							 "_().has('SwitchPosition_switchState', T.eq, 'FAILURE').out('SwitchPosition_switch').has('Switch_currentState', T.neq, 'FAILURE')" +
-							 ").has('id', T.in, switchpositions).id");
-			System.out.println("The SwitchSet pattern result1:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("position = ''; g.V('labels',':SwitchPosition').as('switchposition').in('Route_switchPosition')"
-					+ ".out('Route_exit').has('Signal_currentState', T.eq, 'GO').back('switchposition')"
-					+ ".sideEffect{position = it.SwitchPosition_switchState}.out('SwitchPosition_switch')"
-					+ ".filter{it.Switch_currentState != position}.back('switchposition').id");
-			System.out.println("The SwitchSet pattern result2:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			
-			// (SignalNeighbor)
-			start_time = System.currentTimeMillis();
-			gremcomm.setText("signal = []; route1 = []; sensor = []; g.V('labels',':Route').store(route1).and("
-					 + "_().out('Route_exit').store(signal),"
-					 + "_().out('Route_routeDefinition').in('TrackElement_sensor')"
-					 + ".out('TrackElement_connectsTo').out('TrackElement_sensor').store(sensor).or("
-					 + "_().filter{!it.bothE('Route_routeDefinition').hasNext()},"
-					 + "_().in('Route_routeDefinition').except(route1).out('Route_entry').except(signal)),"
-					 + "_().out('Route_exit').or("
-					 + "_().filter{!it.bothE('Route_entry').hasNext()},"
-					 + "_().in('Route_entry').out('Route_routeDefinition').except(sensor))).id");
-			System.out.println("The SignalNeighbor pattern result:");
-			System.out.println(gremcomm.execute());
-			System.out.println("Running time: " + (System.currentTimeMillis() - start_time) + " ms");
-			*/
 			
 		} finally {
 			if (g != null) {

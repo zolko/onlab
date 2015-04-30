@@ -16,6 +16,7 @@ public class Transformations {
 		db = odb;
 	}
 	
+	/*
 	// repair
 	
 	public void posLengthRepair(List<Row> result) {
@@ -73,6 +74,74 @@ public class Transformations {
 	
 	public void switchSensorUser(Vertex sw) {
 		Iterable<Vertex> sensors = sw.getVertices(Direction.OUT, "TrackElement_sensor");
+		for (Vertex sensor : sensors) {
+			sensor.remove();
+		}
+	}
+	
+	public void switchSetUser() {
+		
+	}
+	
+	*/
+	
+	// Transformation in the new framework
+	
+	public void posLengthRepair(List<Row> result) {
+		Vertex selectedSegment = (Vertex)result.get(0).getColumn("segment");
+		Integer length = (Integer)selectedSegment.getProperty("length");
+		selectedSegment.setProperty("length", -length + 1);
+	}
+	
+	public void routeSensorRepair(List<Row> result) {
+		Vertex selectedRoute = (Vertex)result.get(0).getColumn("route");
+		Vertex selectedSensor = (Vertex)result.get(0).getColumn("sensor");
+		selectedRoute.addEdge("definedBy", selectedSensor);
+	}
+	
+	public void semaphoreNeighborRepair(List<Row> result) {
+		Vertex selectedRoute2 = (Vertex)result.get(0).getColumn("route2");
+		Vertex selectedSignal = (Vertex)result.get(0).getColumn("signal");
+		selectedRoute2.addEdge("entry", selectedSignal);
+	}
+	
+	public void switchSensorRepair(List<Row> result) {
+		Vertex selectedSwitch = (Vertex)result.get(0).getColumn("switch");
+		Vertex sensor = db.addVertex(null);
+		sensor.setProperty("labels", ":Sensor");
+		selectedSwitch.addEdge("sensor", sensor);
+	}
+	
+	public void switchSetRepair(List<Row> result) {
+		Vertex selectedSwitch = (Vertex)result.get(0).getColumn("switch");
+		Vertex selectedSwitchPosition = (Vertex)result.get(0).getColumn("switchposition");
+		String position = selectedSwitchPosition.getProperty("position");
+		selectedSwitch.setProperty("currentPosition", position);
+	}
+	
+	// user
+	
+	public void posLengthUser(Vertex segment) {
+		segment.setProperty("length", 0);
+	}
+	
+	public void routeSensorUser(Vertex route) {
+		Iterable<Edge> definedBys = route.getEdges(Direction.OUT, "definedBy");
+		for (Edge definedBy : definedBys) {
+			definedBy.remove();
+			break;
+		}
+	}
+	
+	public void semaphoreNeighborUser(Vertex route) {
+		Iterable<Edge> entries = route.getEdges(Direction.OUT, "entry");
+		for (Edge entry : entries) {
+			entry.remove();
+		}
+	}
+	
+	public void switchSensorUser(Vertex sw) {
+		Iterable<Vertex> sensors = sw.getVertices(Direction.OUT, "sensor");
 		for (Vertex sensor : sensors) {
 			sensor.remove();
 		}

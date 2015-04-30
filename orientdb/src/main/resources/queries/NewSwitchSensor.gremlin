@@ -1,0 +1,3 @@
+SwitchSensor = new Table()
+g.V('labels',':Switch').filter{!it.outE('sensor').hasNext()}.as('switch').table(SwitchSensor)
+SwitchSensor
