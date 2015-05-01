@@ -1,0 +1,4 @@
+RouteSensor = new Table()
+routes = []
+g.V('labels',':Route').as('route').store(routes).out('follows').as('switchposition').out('switch').as('switch').out('sensor').as('sensor').or(_().filter{!it.inE('definedBy').hasNext()},_().in('definedBy').except(routes)).table(RouteSensor)
+RouteSensor
